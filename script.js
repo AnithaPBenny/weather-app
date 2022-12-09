@@ -1,14 +1,11 @@
-//import {myApi} from './api.js'
 const apikey=`a984f7b9f718a5213000652f43adeaf5`;
-//const apikey= myApi();
 window.addEventListener("load",()=>{
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition((position)=>{
             let lon= position.coords.longitude;
             let lat= position.coords.latitude;
             const url= `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&` + `lon=${lon}&appid=${apikey}`;
-            //const url= `http://api.openweathermap.org/data/2.5/weather?q=delhi&appid=${apikey}`;
-            fetch(url).then((res)=>{
+           fetch(url).then((res)=>{
                 return res.json();
             }).then((data)=>{
                 console.log(data);
@@ -21,7 +18,8 @@ window.addEventListener("load",()=>{
         })
     }
 })
-function searchByCity(){
+function searchByCity()
+{
     var place= document.getElementById('input').value;
     var urlsearch= `http://api.openweathermap.org/data/2.5/weather?q=${place}&` + `appid=${apikey}`;
     fetch(urlsearch).then((res)=>{
@@ -35,7 +33,6 @@ function searchByCity(){
 function weatherReport(data){
 
     var urlcast= `http://api.openweathermap.org/data/2.5/forecast?q=${data.name}&` + `appid=${apikey}`;
-
     fetch(urlcast).then((res)=>{
         return res.json();
     }).then((forecast)=>{
@@ -90,7 +87,7 @@ function hourForecast(forecast){
 }
 function dayForecast(forecast){
     document.querySelector('.weekF').innerHTML=''
-    for (let i = 9; i < forecast.list.length; i+=5) 
+    for (let i = 7; i < forecast.list.length; i+=5) 
     {
         console.log(forecast.list[i]);
         let div= document.createElement('div');
@@ -102,8 +99,16 @@ function dayForecast(forecast){
         div.appendChild(day);
 
         let temp= document.createElement('p');
-        temp.innerText= Math.floor((forecast.list[i].main.temp_max - 273))+ ' °C' + ' / ' + Math.floor((forecast.list[i].main.temp_min - 273))+ ' °C';
+        temp.innerText= Math.floor((forecast.list[i].main.temp_max - 273))+ ' °C' + ' / ' + Math.floor((forecast.list[i].main.temp_min - 273))+ ' °C temperature';
         div.appendChild(temp)
+
+        let speed= document.createElement('p');
+        speed.innerText= Math.floor((forecast.list[i].wind.speed))+'m/s wind speed';
+        div.appendChild(speed)
+
+        let humidity= document.createElement('p');
+        humidity.innerText= Math.floor((forecast.list[i].main.humidity))+'% humidity';
+        div.appendChild(humidity)
 
         let description= document.createElement('p');
         description.setAttribute('class','desc')
